@@ -20,9 +20,6 @@ namespace Console1
         }
 
      
-
-      
-
         private IOperation[] operations {get; set;}
         public object Execute(string name, object[] args)
         {
@@ -47,5 +44,30 @@ namespace Console1
         }
     }
 
+    public class RazOperation : IOperation
+    {
+        public string Name { get { return "Raz"; } }
+        public object Execute(object[] args)
+        {
+            return (int)args[0] - (int)args[1];
+        }
+    }
 
+    public class PowOperation : IOperation
+    {
+        public string Name { get { return "Pow"; } }
+        public object Execute(object[] args)
+        {
+            return Math.Pow((int)args[0], 3);
+        }
+    }
+
+    public class UmnsumOperation : IOperation
+    {
+        public string Name { get { return "UmnSum"; } }
+        public object Execute(object[] args)
+        {
+            return (int)args[0] + (int)args[1] * (int)args[2];
+        }
+    }
 }
