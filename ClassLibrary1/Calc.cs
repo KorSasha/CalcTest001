@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Console1
 {
@@ -14,17 +15,31 @@ namespace Console1
             //return x + y;
         }
 
+        public Calc(IEnumerable<IOperation> opers)
+        {
+            operations = opers;
+        }
+
         public Calc(IOperation[] opers)
         {
             operations = opers;
         }
 
-     
-        private IOperation[] operations {get; set;}
+
+        private IEnumerable<IOperation> operations {get; set;}
         public object Execute(string name, object[] args)
         {
-            var oper = operations.FirstOrDefault(o => o.Name == name);
+            var oper = operations.FirstOrDefault(o =>  o.Name.ToUpper() == name.ToUpper() );
+            
+            if (oper == null)
+                return $"IOperation {name} not found";
             return oper.Execute(args);
+        }
+
+        public IEnumerable<string> GetOperationNames()
+        {
+            return operations.Select(o => o.Name);
+
         }
     }
 
@@ -40,7 +55,17 @@ namespace Console1
         public string Name { get { return "Sum"; } }
         public object Execute(object[] args)
         {
-            return (int)args[0] + (int)args[1];
+            if (args[1] == null)
+            {
+
+                return "Необходим 2 аргумент";
+            }
+            else
+            {
+                var x = Convert.ToInt32(args[0]);
+                var y = Convert.ToInt32(args[1]);
+                return x + y;
+            }
         }
     }
 
@@ -49,7 +74,7 @@ namespace Console1
         public string Name { get { return "Raz"; } }
         public object Execute(object[] args)
         {
-            return (int)args[0] - (int)args[1];
+            return Convert.ToInt32(args[0]) - Convert.ToInt32(args[1]);
         }
     }
 
@@ -58,7 +83,15 @@ namespace Console1
         public string Name { get { return "Pow"; } }
         public object Execute(object[] args)
         {
-            return Math.Pow((int)args[0], 3);
+            if (args[0] == null)
+            {
+
+                return "Необходим 1 аргумент";
+            }
+            else
+            {
+                return Math.Pow(Convert.ToInt32(args[0]), 3);
+            }
         }
     }
 
@@ -67,7 +100,19 @@ namespace Console1
         public string Name { get { return "UmnSum"; } }
         public object Execute(object[] args)
         {
-            return (int)args[0] + (int)args[1] * (int)args[2];
+            
+            if (args[2] == null)
+            {
+               
+                return "Необходим 3 аргумент";
+            }
+            else
+            {
+                var x = Convert.ToInt32(args[0]);
+                var y = Convert.ToInt32(args[1]);
+                var z = Convert.ToInt32(args[2]);
+                return x + y * z;
+            }
         }
     }
 }
