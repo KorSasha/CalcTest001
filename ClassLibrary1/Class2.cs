@@ -13,9 +13,9 @@ namespace UmnSumOperation
         public string Name { get { return "DelSum1"; } }
         public object Execute(object[] args)
         {
-            if (args[2]==null)
-            {
-                return "Необходим 3 аргумент";
+            if (args.Count()<3)
+            { 
+                return 0;
             }
             else
             {
@@ -29,14 +29,14 @@ namespace UmnSumOperation
 
     }
 
-    public class SingleOperation : IOperation
+    public class UmnSum : IOperation
     {
         public string Name { get { return "Single"; } }
         public object Execute(object[] args)
         {
             if (args[0] == null)
             {
-                return "Необходим 1 аргумент";
+                return 0;
             }
             else
             {

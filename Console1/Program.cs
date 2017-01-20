@@ -28,7 +28,6 @@ namespace Console1
             #region 
             foreach (var file in files)
             {
-                //
                 var assebly = Assembly.LoadFile(file);//сборка
                 var types = assebly.GetTypes();
                

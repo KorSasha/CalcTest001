@@ -13,9 +13,9 @@ namespace SuperOperations
          public string Name { get { return "RazSum"; } }
          public object Execute(object[] args)
          {
-            if (args[2] == null)
+            if (args.Count()<3)
             {
-                return "Необходим 3 аргумент";
+                return 0;
             }
             else
             {

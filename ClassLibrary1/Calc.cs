@@ -29,10 +29,20 @@ namespace Console1
         private IEnumerable<IOperation> operations {get; set;}
         public object Execute(string name, object[] args)
         {
-            var oper = operations.FirstOrDefault(o =>  o.Name.ToUpper() == name.ToUpper() );
+            var opers = operations.Where(o =>  o.Name.ToUpper() == name.ToUpper() );
             
+            if (!opers.Any())
+                return $"IOperation \"{name}\" not found";
+            //Из всех операций выделяем только операции с заданым количеством аргументов
+            var opersWithCount = opers.OfType<IOperationCount>();
+
+            IOperation oper = opersWithCount.FirstOrDefault(o => o.Count == args.Count()) ?? opers.FirstOrDefault();//as IOperation;
+
             if (oper == null)
-                return $"IOperation {name} not found";
+            {
+                return $"IOperation \"{name}\" not found";
+
+            }
             return oper.Execute(args);
         }
 
@@ -50,18 +60,49 @@ namespace Console1
 
     }
 
+    public interface IOperationCount: IOperation
+    {
+        /// <summary>
+        /// Количесво аргументов в операции
+        /// </summary>
+        int Count{ get; }
+    }
+
+    public class DivOperation : IOperationCount
+    {
+        public int Count { get { return 1; } }
+        public string Name { get { return "Summ"; } }
+        public object Execute(object[] args)
+        {
+            if (args.Count() <= 1)
+            {
+
+                return 0;
+            }
+            else
+            {
+                var x = Convert.ToInt32(args[0]);
+                var y = Convert.ToInt32(args[1]);
+                return x + y;
+            }
+            
+        }
+
+    }
+
     public class SumOperation : IOperation
     {
         public string Name { get { return "Sum"; } }
         public object Execute(object[] args)
         {
-            if (args[1] == null)
+            if (args.Count() <= 1)
             {
 
-                return "Необходим 2 аргумент";
+                return 0;
             }
             else
             {
+                
                 var x = Convert.ToInt32(args[0]);
                 var y = Convert.ToInt32(args[1]);
                 return x + y;
@@ -74,7 +115,16 @@ namespace Console1
         public string Name { get { return "Raz"; } }
         public object Execute(object[] args)
         {
-            return Convert.ToInt32(args[0]) - Convert.ToInt32(args[1]);
+
+                if (args.Count() <= 1)
+                {
+
+                    return 0;
+                }
+                else
+                {
+                    return Convert.ToInt32(args[0]) - Convert.ToInt32(args[1]);
+                }
         }
     }
 
@@ -83,10 +133,10 @@ namespace Console1
         public string Name { get { return "Pow"; } }
         public object Execute(object[] args)
         {
-            if (args[0] == null)
+            if (args.Count() < 1)
             {
 
-                return "Необходим 1 аргумент";
+                return 0;
             }
             else
             {
@@ -101,10 +151,10 @@ namespace Console1
         public object Execute(object[] args)
         {
             
-            if (args[2] == null)
+            if (args.Count() <=2)
             {
                
-                return "Необходим 3 аргумент";
+                return 0;
             }
             else
             {
